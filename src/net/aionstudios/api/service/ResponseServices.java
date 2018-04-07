@@ -18,7 +18,6 @@ public class ResponseServices {
 			os.write(response.getBytes());
 			os.close();
 		} catch (IOException e) {
-			e.printStackTrace();
 			return false;
 		}
 		return true;

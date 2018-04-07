@@ -46,7 +46,7 @@ public class RequestUtils {
 		  byte[] buffer = new byte[2048];
 		  int read = 0;
 		  while ((read = inputStream.read(buffer)) != -1) {
-		    byteArrayOutputStream.write(buffer, 0, read);
+			  byteArrayOutputStream.write(buffer, 0, read);
 		  }
 		  String[] keyValuePairs = byteArrayOutputStream.toString().split("&");
 		  for (String keyValuePair : keyValuePairs) {
