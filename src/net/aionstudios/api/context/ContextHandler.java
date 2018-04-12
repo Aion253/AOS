@@ -117,7 +117,7 @@ public class ContextHandler implements HttpHandler {
 			JSONObject data = resp.oneTimeDataFetch();
 			JSONObject error = resp.oneTimeErrorFetch();
 			String eventID = SecurityUtils.genToken(16);
-			String eventDuplicateQuery = "SELECT COUNT(*) FROM `aosevents` WHERE `eventID` = ?;";
+			String eventDuplicateQuery = "SELECT COUNT(*) FROM `AOSEvents` WHERE `eventID` = ?;";
 			List<Map<String, Object>> duplicate = DatabaseUtils.prepareAndExecute(eventDuplicateQuery, false, eventID).get(0).getResults();
 			while(((long) duplicate.get(0).get("COUNT(*)"))>0) {
 				eventID = SecurityUtils.genToken(16);
@@ -150,7 +150,7 @@ public class ContextHandler implements HttpHandler {
 				eventStatusDesc = error.getString("status_desc");
 				eventMessage = error.getString("message");
 			}
-			String insertEventQuery = "INSERT INTO `aosevents` "
+			String insertEventQuery = "INSERT INTO `AOSEvents` "
 					+ "(`eventID`, `apiKey`, `ip`, `startTime`, `context`, `getData`, `postData`, `status`, `statusType`, `statusDesc`, `message`) "
 					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 			DatabaseUtils.prepareAndExecute(insertEventQuery, false, eventID, apiKey, he.getRemoteAddress().getAddress().getHostAddress(),

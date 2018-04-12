@@ -8,16 +8,16 @@ import net.aionstudios.api.util.SecurityUtils;
 
 public class AccountServices {
 	
-	private static String tokenToKeyQuery = "SELECT `apiKey` FROM `aossessions` WHERE `apiToken`=? LIMIT 1;";
-	private static String keyToTokenQuery = "SELECT `apiToken` FROM `aossessions` WHERE `apiKey`=? LIMIT 1;";
-	private static String tokenInUseQuery = "SELECT COUNT(*) FROM `aossessions` WHERE `apiToken`=? LIMIT 1;";
-	private static String keyHasTokenQuery = "SELECT COUNT(*) FROM `aossessions` WHERE `apiKey`=? LIMIT 1;";
-	private static String credentialsValidQuery = "SELECT COUNT(*) FROM `aosaccount` WHERE `apiKey`=? AND `apiSecret`=? LIMIT 1;";
+	private static String tokenToKeyQuery = "SELECT `apiKey` FROM `AOSSessions` WHERE `apiToken`=? LIMIT 1;";
+	private static String keyToTokenQuery = "SELECT `apiToken` FROM `AOSSessions` WHERE `apiKey`=? LIMIT 1;";
+	private static String tokenInUseQuery = "SELECT COUNT(*) FROM `AOSSessions` WHERE `apiToken`=? LIMIT 1;";
+	private static String keyHasTokenQuery = "SELECT COUNT(*) FROM `AOSSessions` WHERE `apiKey`=? LIMIT 1;";
+	private static String credentialsValidQuery = "SELECT COUNT(*) FROM `AOSAccounts` WHERE `apiKey`=? AND `apiSecret`=? LIMIT 1;";
 	
-	private static String insertTokenSession = "INSERT INTO `aossessions` (`apiKey`,`apiToken`,`validFrom`,`validTo`) VALUES (?,?,?,?);";
-	private static String purgeExpiredSessions = "DELETE FROM `aossessions` WHERE `validTo`<=?;";
+	private static String insertTokenSession = "INSERT INTO `AOSSessions` (`apiKey`,`apiToken`,`validFrom`,`validTo`) VALUES (?,?,?,?);";
+	private static String purgeExpiredSessions = "DELETE FROM `AOSSessions` WHERE `validTo`<=?;";
 	
-	private static String validSecondsQuery = "SELECT (UNIX_TIMESTAMP(validTo)) FROM `aossessions` WHERE `apiToken`=? LIMIT 1;";
+	private static String validSecondsQuery = "SELECT (UNIX_TIMESTAMP(validTo)) FROM `AOSSessions` WHERE `apiToken`=? LIMIT 1;";
 	
 	public static String getApiKeyFromToken(String token) {
 		List<QueryResults> q = DatabaseUtils.prepareAndExecute(tokenToKeyQuery, true, token);

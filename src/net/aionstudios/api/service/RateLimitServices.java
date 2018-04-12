@@ -37,8 +37,8 @@ public class RateLimitServices {
 		RateLimitServices.accountLimit = accountLimit;
 	}
 	
-	private static String ipEventCountLastHourQuery = "Select COUNT(*) from `aosevents` WHERE `ip`=? AND `startTime` > DATE_SUB(NOW(),INTERVAL 1 HOUR);";
-	private static String apiKeyEventCountLastHourQuery = "Select COUNT(*) from `aosevents` WHERE `apiKey`=? AND `startTime` > DATE_SUB(NOW(),INTERVAL 1 HOUR);";
+	private static String ipEventCountLastHourQuery = "Select COUNT(*) from `AOSEvents` WHERE `ip`=? AND `startTime` > DATE_SUB(NOW(),INTERVAL 1 HOUR);";
+	private static String apiKeyEventCountLastHourQuery = "Select COUNT(*) from `AOSEvents` WHERE `apiKey`=? AND `startTime` > DATE_SUB(NOW(),INTERVAL 1 HOUR);";
 	
 	public static boolean isIPOverLimit(String ipAddress) {
 		if(useRates&&(long) getIPEventsLastHour(ipAddress)>baseLimit) return true;

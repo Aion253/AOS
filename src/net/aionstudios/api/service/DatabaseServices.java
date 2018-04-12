@@ -3,7 +3,7 @@ import net.aionstudios.api.util.DatabaseUtils;
 
 public class DatabaseServices {
 	
-	private static String createAccountsTable = "CREATE TABLE IF NOT EXISTS `AOSAccount` (" + 
+	private static String createAccountsTable = "CREATE TABLE IF NOT EXISTS `AOSAccounts` (" + 
 			" `apiKey` varchar(64) NOT NULL," + 
 			" `apiSecret` varchar(256) NOT NULL," + 
 			" `appDesc` text NULL," + 
