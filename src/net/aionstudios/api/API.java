@@ -32,11 +32,50 @@ public class API {
 	private static String streamPrefix;
 	
 	/*Why do static field modifications within an instanced class modify the fields of all instances as the declaring class? That's dumb.*/
-	//http://76.28.142.201:3393/instance?action=ping
+	
+	//Ubuntu server needed `iptables -I INPUT -p tcp --dport 224 -j ACCEPT` and `ufw allow 3393` run in order to make the server publicly accessible.
+	//On machines running certain webservers, including Apache, the service will not be available via the use of the public IP.
+	//In the case of apaache, it is recommended to set a subdomain such that it internally and silently redirects to the service. Via mod_proxy.
+	/*My apache2.conf sees the addition of the following lines, preceding any other virutal host statements.
+	 * <VirtualHost *:80>
+		DocumentRoot "/var/www/example/public_html/api"
+    	ServerName api.example.com
+		ServerSignature off
+    	ProxyPreserveHost On
+		
+    		# setup the proxy
+    		<Proxy *>
+        		Order allow,deny
+        		Allow from all
+    		</Proxy>
+    		ProxyPass /api/ http://localhost:port/
+    		ProxyPassReverse /api/ http://localhost:port/
+		</VirtualHost>
+
+		<VirtualHost *:443>
+			DocumentRoot "/var/www/example/public_html/api"
+    		ServerName api.example.com
+			SSLEngine on
+			SSLCertificateFile /etc/apache2/certs/cert.crt
+			SSLCertificateKeyFile /etc/apache2/certs/key.key
+			ServerSignature off
+    		ProxyPreserveHost On
+
+    		# setup the proxy
+    		<Proxy *>
+        		Order allow,deny
+        		Allow from all
+    		</Proxy>
+    		ProxyPass /api/ http://localhost:port/
+    		ProxyPassReverse /api/ http://localhost:port/
+		</VirtualHost>
+	 */
+	//This method will, in addition, make it appear as though the user is connecting over SSL if you have an SSL certificate and effectively secure the application in respect to internet transmission without using a Java truststore.
 	
 	private static APIServer server;
 	
 	public static boolean initAPI(String apiName, int apiPort, boolean apiLog, String apiStreamPrefix) {
+		System.setProperty("java.net.preferIPv4Stack" , "true");
 		if(name!=null) {
 			System.err.println("An API was already intialized for this instance! Only one API can be registered!");
 			return false;
