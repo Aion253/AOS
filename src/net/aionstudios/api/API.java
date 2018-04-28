@@ -72,6 +72,8 @@ public class API {
 	 */
 	//This method will, in addition, make it appear as though the user is connecting over SSL if you have an SSL certificate and effectively secure the application in respect to internet transmission without using a Java truststore.
 	
+	//An alternate method to intercept traffic to a web server which will then forward, with optional load balancing, requests to any http server running client software for such an action is now under development by me. This project will not require it's use but my APIs will run on it.
+	
 	private static APIServer server;
 	
 	public static boolean initAPI(String apiName, int apiPort, boolean apiLog, String apiStreamPrefix) {

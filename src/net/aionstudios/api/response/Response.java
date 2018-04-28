@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import net.aionstudios.api.aos.ResponseStatus;
 import net.aionstudios.api.error.AOSError;
 import net.aionstudios.api.service.ResponseServices;
+import net.aionstudios.api.util.RequestUtils;
 
 public class Response {
 	
@@ -24,7 +25,7 @@ public class Response {
 	private String requestIP = "";
 	
 	public Response(HttpExchange he) {
-		requestIP = he.getRemoteAddress().getAddress().getHostAddress();
+		requestIP = RequestUtils.getRequestIP(he);
 		data = ResponseServices.getLinkedJsonObject();
 		error = ResponseServices.getLinkedJsonObject();
 		dataMap = new HashMap<String, Object>();

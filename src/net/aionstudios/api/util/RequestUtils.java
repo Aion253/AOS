@@ -12,6 +12,13 @@ import com.sun.net.httpserver.HttpExchange;
 
 public class RequestUtils {
 	
+	public static String getRequestIP(HttpExchange he) {
+		if(he.getRequestHeaders().containsKey("X-Forwarded-For")) {
+			return he.getRequestHeaders().getFirst("X-Forwarded-For");
+		}
+		return he.getRemoteAddress().getAddress().getHostAddress();
+	}
+	
 	public static Map<String, String> resolveGetQuery(String qs) {
 	    Map<String, String> result = new HashMap<>();
 	    if (qs == null)

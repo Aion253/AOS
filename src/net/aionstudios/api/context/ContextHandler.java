@@ -69,7 +69,7 @@ public class ContextHandler implements HttpHandler {
 				rateLimited = true;
 			}
 		} else {
-			rateLimited = RateLimitServices.isIPOverLimit(he.getRemoteAddress().getAddress().getHostAddress());
+			rateLimited = RateLimitServices.isIPOverLimit(RequestUtils.getRequestIP(he));
 			ipReason=true;
 		}
 		if(!rateLimited) {
@@ -153,7 +153,7 @@ public class ContextHandler implements HttpHandler {
 			String insertEventQuery = "INSERT INTO `AOSEvents` "
 					+ "(`eventID`, `apiKey`, `ip`, `startTime`, `context`, `getData`, `postData`, `status`, `statusType`, `statusDesc`, `message`) "
 					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-			DatabaseUtils.prepareAndExecute(insertEventQuery, false, eventID, apiKey, he.getRemoteAddress().getAddress().getHostAddress(),
+			DatabaseUtils.prepareAndExecute(insertEventQuery, false, eventID, apiKey, RequestUtils.getRequestIP(he),
 					DateTimeServices.getMysqlCompatibleDateTime(), requestContext, getQuery.toString(), postQuery.toString(), 
 					eventStatus, eventStatusType, eventStatusDesc, eventMessage);
 			ResponseServices.generateHTTPResponse(he, response.toString(2));
