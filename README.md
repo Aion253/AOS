@@ -1,2 +1,2 @@
 # AOS
-A library for creating APIs originally for implementation on the Aion Online Services Platform.
+A library for creating scalable JSON APIs accessible over standard web protocols.
