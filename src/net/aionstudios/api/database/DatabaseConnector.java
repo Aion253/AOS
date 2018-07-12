@@ -1,4 +1,4 @@
-package net.aionstudios.api.external;
+package net.aionstudios.api.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

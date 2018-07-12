@@ -19,8 +19,8 @@ import net.aionstudios.api.contexts.InstanceContext;
 import net.aionstudios.api.contexts.RateLimitsContext;
 import net.aionstudios.api.cron.CronManager;
 import net.aionstudios.api.crons.PurgeExpiredSessionsCronJob;
+import net.aionstudios.api.database.DatabaseConnector;
 import net.aionstudios.api.errors.InternalErrors;
-import net.aionstudios.api.external.DatabaseConnector;
 import net.aionstudios.api.server.APIServer;
 import net.aionstudios.api.service.DatabaseServices;
 

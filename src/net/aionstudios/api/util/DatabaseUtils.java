@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.aionstudios.api.database.DatabaseConnector;
 import net.aionstudios.api.database.QueryResults;
-import net.aionstudios.api.external.DatabaseConnector;
 
 public class DatabaseUtils {
 	
