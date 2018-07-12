@@ -21,6 +21,7 @@ public class Response {
 	
 	private boolean dataFetched = false;
 	private boolean errorFetched = false;
+	private int httpResponseCode = 200;
 	
 	private String requestIP = "";
 	
@@ -32,6 +33,26 @@ public class Response {
 	}
 	
 	public void putDataResponse(ResponseStatus status, String message) {
+		httpResponseCode = 200;
+		ResponseServices.clearJsonObject(data);
+		try {
+			data.put("status", "S"+status.getStatus());
+			data.put("status_type", status.getStatusType());
+			data.put("status_desc", status.getStatusDesc());
+			data.put("message", message);
+			if(dataMap!=null&&dataMap.size()>0) {
+				for(int i = 0; i < dataMap.size(); i++) {
+					data.put((String) dataMap.keySet().toArray()[i], dataMap.get(dataMap.keySet().toArray()[i]));
+				}
+			}
+		} catch (JSONException e) {
+			System.out.println("A JSONException prevented the reply!");
+			e.printStackTrace();
+		}
+	}
+	
+	public void putDataResponse(ResponseStatus status, int httpResponseCode, String message) {
+		this.httpResponseCode = httpResponseCode;
 		ResponseServices.clearJsonObject(data);
 		try {
 			data.put("status", "S"+status.getStatus());
@@ -58,6 +79,7 @@ public class Response {
 	}
 	
 	public void putErrorResponse(AOSError aosError, String message) {
+		httpResponseCode = aosError.getResponseCode();
 		aosError.throwError(error, message);
 	}
 	
@@ -79,6 +101,10 @@ public class Response {
 	
 	public String getRequestIP() {
 		return requestIP;
+	}
+	
+	public int getResponseCode() {
+		return httpResponseCode;
 	}
 
 }

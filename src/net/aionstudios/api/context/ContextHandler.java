@@ -33,7 +33,7 @@ public class ContextHandler implements HttpHandler {
 		JSONObject request = ResponseServices.getLinkedJsonObject();
 		Response resp = new Response(he);
 		if(he.getRequestURI().toString().equals("/")) {
-			ResponseServices.generateHTTPResponse(he, AOSInfo.getBlankRootString());
+			ResponseServices.generateHTTPResponse(he, resp.getResponseCode(), AOSInfo.getBlankRootString());
 			return;
 		}
 		String[] requestSplit;
@@ -156,11 +156,11 @@ public class ContextHandler implements HttpHandler {
 			DatabaseUtils.prepareAndExecute(insertEventQuery, false, eventID, apiKey, RequestUtils.getRequestIP(he),
 					DateTimeServices.getMysqlCompatibleDateTime(), requestContext, getQuery.toString(), postQuery.toString(), 
 					eventStatus, eventStatusType, eventStatusDesc, eventMessage);
-			ResponseServices.generateHTTPResponse(he, response.toString(2));
+			ResponseServices.generateHTTPResponse(he, resp.getResponseCode(), response.toString(2));
 			return;
 		} catch (JSONException e) {
 			System.err.println("Failed converting JSON to String");
-			ResponseServices.generateHTTPResponse(he, "Service Failed!");
+			ResponseServices.generateHTTPResponse(he, 500, "Service Failed!");
 			e.printStackTrace();
 			return;
 		}

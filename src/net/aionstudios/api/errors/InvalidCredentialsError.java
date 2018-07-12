@@ -5,7 +5,7 @@ import net.aionstudios.api.error.AOSError;
 public class InvalidCredentialsError extends AOSError {
 
 	public InvalidCredentialsError() {
-		super("InvalidCredentialsError", "Valid credentials were not provided!");
+		super("InvalidCredentialsError", 401, "Valid credentials were not provided!");
 	}
 
 }

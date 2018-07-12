@@ -5,7 +5,7 @@ import net.aionstudios.api.error.AOSError;
 public class MissingGetParametersError extends AOSError {
 
 	public MissingGetParametersError() {
-		super("MissingGetParameters", "The provided get parameters did not satisfy the action!");
+		super("MissingGetParameters", 422, "The provided get parameters did not satisfy the action!");
 	}
 
 }

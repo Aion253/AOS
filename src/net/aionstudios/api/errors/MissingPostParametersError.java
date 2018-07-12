@@ -5,7 +5,7 @@ import net.aionstudios.api.error.AOSError;
 public class MissingPostParametersError extends AOSError {
 
 	public MissingPostParametersError() {
-		super("MissingPostParameters", "The provided post parameters did not satisfy the action!");
+		super("MissingPostParameters", 422, "The provided post parameters did not satisfy the action!");
 	}
 
 }

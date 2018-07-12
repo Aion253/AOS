@@ -5,7 +5,7 @@ import net.aionstudios.api.error.AOSError;
 public class NoSuchActionError extends AOSError {
 
 	public NoSuchActionError() {
-		super("NoSuchAction", "The request action was not recognized by the context!");
+		super("NoSuchAction", 404, "The request action was not recognized by the context!");
 	}
 
 }

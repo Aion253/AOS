@@ -11,9 +11,9 @@ import com.sun.net.httpserver.HttpExchange;
 
 public class ResponseServices {
 	
-	public static boolean generateHTTPResponse(HttpExchange he, String response) {
+	public static boolean generateHTTPResponse(HttpExchange he, int httpResponseCode, String response) {
 		try {
-			he.sendResponseHeaders(200, response.length());
+			he.sendResponseHeaders(httpResponseCode, response.length());
 			OutputStream os = he.getResponseBody();
 			os.write(response.getBytes());
 			os.close();

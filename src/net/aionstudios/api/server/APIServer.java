@@ -11,7 +11,7 @@ import net.aionstudios.api.context.ContextHandler;
 public class APIServer {
 	
 	HttpServer server;
-	int serverPort = 14444;
+	int serverPort = 26767;
 	
 	public APIServer(int port) throws IOException {
 		if(port<0||port>65535) {

@@ -9,10 +9,12 @@ public class AOSError {
 	
 	private String name;
 	private String desc;
+	private int responseCode;
 	
-	public AOSError(String errorName, String errorDesc) {
+	public AOSError(String errorName, int httpResponseCode, String errorDesc) {
 		name = errorName;
 		desc = errorDesc;
+		responseCode = httpResponseCode;
 	}
 	
 	@SuppressWarnings("unused")
@@ -37,4 +39,8 @@ public class AOSError {
 		return desc;
 	}
 
+	public int getResponseCode() {
+		return responseCode;
+	}
+	
 }

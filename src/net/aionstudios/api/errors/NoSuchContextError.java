@@ -5,7 +5,7 @@ import net.aionstudios.api.error.AOSError;
 public class NoSuchContextError extends AOSError {
 
 	public NoSuchContextError() {
-		super("NoSuchContext", "The request context was not recognized!");
+		super("NoSuchContext", 404, "The request context was not recognized!");
 	}
 
 }
