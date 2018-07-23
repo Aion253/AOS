@@ -1,6 +1,12 @@
 package net.aionstudios.api.service;
 import net.aionstudios.api.util.DatabaseUtils;
 
+/**
+ * A class providing services relating to AOS's database management.
+ * 
+ * @author Winter Roberts
+ *
+ */
 public class DatabaseServices {
 	
 	private static String createAccountsTable = "CREATE TABLE IF NOT EXISTS `AOSAccounts` (" + 
@@ -42,11 +48,13 @@ public class DatabaseServices {
 			" PRIMARY KEY (`eventID`)" + 
 			") ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE latin1_general_cs";
 	
-	public static boolean createTables() {
+	/**
+	 * Creates database tables necessary to AOS's function.
+	 */
+	public static void createTables() {
 		DatabaseUtils.prepareAndExecute(createAccountsTable, true);
 		DatabaseUtils.prepareAndExecute(createSessionsTable, true);
 		DatabaseUtils.prepareAndExecute(createEventsTable, true);
-		return true;
 	}
 
 }

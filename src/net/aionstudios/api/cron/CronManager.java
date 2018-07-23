@@ -5,8 +5,17 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import net.aionstudios.api.server.APIServer;
+import net.aionstudios.api.context.Context;
+import net.aionstudios.api.context.ContextHandler;
 import net.aionstudios.api.service.DateTimeServices;
 
+/**
+ * A class that accumulates {@link CronJob}s on the {@link APIServer} so that they can be executed by the cron thread on a schedule as defined by their associated {@link CronDateTime}s.
+ * 
+ * @author Winter Roberts
+ *
+ */
 public class CronManager {
 	
 	private static List<CronJob> jobs = new ArrayList<CronJob>();
@@ -14,6 +23,9 @@ public class CronManager {
 	private static Thread cronThread;
 	private static ExecutorService jobExecutor;
 	
+	/**
+	 * Starts the cron thread and periodically checks if each enabled {@link CronJob} should be executed.
+	 */
 	public static void startCron() {
 		if(!cronStarted) {
 			cronStarted = true;

@@ -11,6 +11,9 @@ import net.aionstudios.api.response.Response;
 import net.aionstudios.api.service.AccountServices;
 import net.aionstudios.api.service.RateLimitServices;
 
+/**
+ * An {@link Action} that checks the current rate-limit status of the client by IP or apiToken if one is provided.
+ */
 public class RateLimitsCheckAction extends Action {
 
 	public RateLimitsCheckAction() {

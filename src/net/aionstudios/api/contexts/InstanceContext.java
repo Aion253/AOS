@@ -8,6 +8,12 @@ import net.aionstudios.api.aos.ResponseStatus;
 import net.aionstudios.api.context.Context;
 import net.aionstudios.api.response.Response;
 
+/**
+ * An AOS-provided {@link Context} for dealing requests pertaining to information about the containing {@link APIServer}.
+ * 
+ * @author Winter Roberts
+ *
+ */
 public class InstanceContext extends Context {
 
 	public InstanceContext() {

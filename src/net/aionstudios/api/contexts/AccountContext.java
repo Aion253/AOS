@@ -6,6 +6,12 @@ import net.aionstudios.api.context.Context;
 import net.aionstudios.api.errors.InternalErrors;
 import net.aionstudios.api.response.Response;
 
+/**
+ * An AOS-provided {@link Context} for dealing with client-authenticated requests.
+ * 
+ * @author Winter Roberts
+ *
+ */
 public class AccountContext extends Context {
 
 	public AccountContext() {

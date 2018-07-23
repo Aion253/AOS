@@ -8,6 +8,9 @@ import net.aionstudios.api.action.Action;
 import net.aionstudios.api.aos.ResponseStatus;
 import net.aionstudios.api.response.Response;
 
+/**
+ * A simple {@link Action} that notifies a client that the node is in fact online and functioning.
+ */
 public class InstancePingAction extends Action {
 
 	public InstancePingAction() {

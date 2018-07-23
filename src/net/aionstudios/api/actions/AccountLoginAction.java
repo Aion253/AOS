@@ -10,6 +10,9 @@ import net.aionstudios.api.errors.InternalErrors;
 import net.aionstudios.api.response.Response;
 import net.aionstudios.api.service.AccountServices;
 
+/**
+ * An action that enables user-authenticated requesting to the API, which can be enabled or disabled by programmers.
+ */
 public class AccountLoginAction extends Action {
 
 	public AccountLoginAction() {

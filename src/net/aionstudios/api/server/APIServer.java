@@ -8,18 +8,35 @@ import com.sun.net.httpserver.HttpServer;
 
 import net.aionstudios.api.context.ContextHandler;
 
+/**
+ * A class that creates the {@link APIServer} and sets up request handling.
+ * 
+ * @author Winter Roberts
+ *
+ */
 public class APIServer {
 	
 	HttpServer server;
 	int serverPort = 26767;
 	
-	public APIServer(int port) throws IOException {
+	/**
+	 * Creates a new {@link APIServer}
+	 * 
+	 * @param port The port on which the server should start.
+	 */
+	public APIServer(int port) {
 		if(port<0||port>65535) {
 			System.out.println("No valid server port, using default "+serverPort);
 		} else {
 			this.serverPort=port;
 		}
-		server = HttpServer.create(new InetSocketAddress(serverPort), 0);
+		try {
+			server = HttpServer.create(new InetSocketAddress(serverPort), 0);
+		} catch (IOException e) {
+			System.err.println("Failed to AOS Server!");
+			e.printStackTrace();
+			System.exit(0);
+		}
 		server.createContext("/", new ContextHandler());
 		server.setExecutor(Executors.newCachedThreadPool());
 		server.start();

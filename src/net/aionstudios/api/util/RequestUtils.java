@@ -10,8 +10,20 @@ import java.util.Map;
 
 import com.sun.net.httpserver.HttpExchange;
 
+/**
+ * A class providing utilities for working with requests.
+ * 
+ * @author Winter Roberts
+ *
+ */
 public class RequestUtils {
 	
+	/**
+	 * Gets the IP address of a client if it traveled through a normal proxy or other system that provides the X-Forwarded-For header.
+	 * 
+	 * @param he The HTTP request.
+	 * @return The IP address of the request origin.
+	 */
 	public static String getRequestIP(HttpExchange he) {
 		if(he.getRequestHeaders().containsKey("X-Forwarded-For")) {
 			return he.getRequestHeaders().getFirst("X-Forwarded-For");
@@ -19,6 +31,12 @@ public class RequestUtils {
 		return he.getRemoteAddress().getAddress().getHostAddress();
 	}
 	
+	/**
+	 * Maps elements of a get query for easy processing.
+	 * 
+	 * @param qs A get query from url.
+	 * @return A HashMap of get parameters and their values.
+	 */
 	public static Map<String, String> resolveGetQuery(String qs) {
 	    Map<String, String> result = new HashMap<>();
 	    if (qs == null)
@@ -46,6 +64,12 @@ public class RequestUtils {
 	    return result;
 	}
 	
+	/**
+	 * Maps elements of a post query for easy processing.
+	 * 
+	 * @param he The HTTP request.
+	 * @return A HashMap of post parameters and their values.
+	 */
 	public static Map<String, String> resolvePostQuery(HttpExchange httpExchange) throws IOException {
 		  Map<String, String> parameters = new HashMap<>();
 		  InputStream inputStream = httpExchange.getRequestBody();

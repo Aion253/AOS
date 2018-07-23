@@ -7,6 +7,12 @@ import net.aionstudios.api.context.Context;
 import net.aionstudios.api.response.Response;
 import net.aionstudios.api.service.RateLimitServices;
 
+/**
+ * An AOS-provided {@link Context} for dealing with rate limiting.
+ * 
+ * @author Winter Roberts
+ *
+ */
 public class RateLimitsContext extends Context {
 
 	public RateLimitsContext() {

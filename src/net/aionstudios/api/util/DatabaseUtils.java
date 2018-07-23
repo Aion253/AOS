@@ -13,8 +13,22 @@ import java.util.Map;
 import net.aionstudios.api.database.DatabaseConnector;
 import net.aionstudios.api.database.QueryResults;
 
+/**
+ * A class providing utilities for working with databases.
+ * 
+ * @author Winter Roberts
+ *
+ */
 public class DatabaseUtils {
 	
+	/**
+	 * Uses a prepared statement for security and inserts provided elements for a query.
+	 * 
+	 * @param preparedStatement A prepared MySQL statement.
+	 * @param logError Whether or not to log MySQL errors for this query.
+	 * @param elements An array of objects to be added to the query.
+	 * @return A List of {@link QueryResults}.
+	 */
 	public static List<QueryResults> prepareAndExecute(String preparedStatement, boolean logError, Object... elements) {
 		Connection connection = null;
 		PreparedStatement statement = null;
