@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 
 import org.json.JSONObject;
 
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
 /**
@@ -27,9 +28,12 @@ public class ResponseServices {
 	 */
 	public static boolean generateHTTPResponse(HttpExchange he, int httpResponseCode, String response) {
 		try {
-			he.sendResponseHeaders(httpResponseCode, response.length());
+			byte[] respBytes = response.getBytes();
+			Headers respHeaders = he.getResponseHeaders();
+			respHeaders.set("Content-Type", "application/json");
+			he.sendResponseHeaders(200, respBytes.length);
 			OutputStream os = he.getResponseBody();
-			os.write(response.getBytes());
+			os.write(respBytes);
 			os.close();
 		} catch (IOException e) {
 			return false;
