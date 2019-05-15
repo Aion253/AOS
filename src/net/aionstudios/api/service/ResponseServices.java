@@ -3,12 +3,17 @@ package net.aionstudios.api.service;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 
 import org.json.JSONObject;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
+
+import net.aionstudios.api.compression.CompressionEncoding;
+import net.aionstudios.api.compression.DeflateCompressor;
+import net.aionstudios.api.compression.GZIPCompressor;
 
 /**
  * A class providing services relating to AOS responses.
@@ -26,14 +31,24 @@ public class ResponseServices {
 	 * @param response The response (likely a serialized {@link JSONObject}).
 	 * @return True if the response was sent successfully, false otherwise.
 	 */
-	public static boolean generateHTTPResponse(HttpExchange he, int httpResponseCode, String response) {
+	public static boolean generateHTTPResponse(HttpExchange he, int httpResponseCode, String response, CompressionEncoding ce) {
 		try {
-			byte[] respBytes = response.getBytes();
+			byte[] respBytes;
 			Headers respHeaders = he.getResponseHeaders();
 			respHeaders.set("Content-Type", "application/json");
+			if(ce.getValue()==CompressionEncoding.GZIP.getValue()) {
+				respHeaders.set("Content-Encoding", "gzip");
+				respBytes = GZIPCompressor.compress(response);
+			} else if (ce.getValue()==CompressionEncoding.DEFLATE.getValue()) {
+				respHeaders.set("Content-Encoding", "deflate");
+				respBytes = DeflateCompressor.compress(response);
+			} else {
+				respBytes = response.getBytes(StandardCharsets.UTF_8);
+			}
 			he.sendResponseHeaders(200, respBytes.length);
 			OutputStream os = he.getResponseBody();
 			os.write(respBytes);
+			os.flush();
 			os.close();
 		} catch (IOException e) {
 			return false;

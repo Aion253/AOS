@@ -18,6 +18,7 @@ public class APIServer {
 	
 	HttpServer server;
 	int serverPort = 26767;
+	private APISecureServer secureServer;
 	
 	/**
 	 * Creates a new {@link APIServer}
@@ -25,6 +26,7 @@ public class APIServer {
 	 * @param port The port on which the server should start.
 	 */
 	public APIServer(int port) {
+		secureServer = new APISecureServer();
 		if(port<0||port>65535) {
 			System.out.println("No valid server port, using default "+serverPort);
 		} else {
@@ -41,6 +43,10 @@ public class APIServer {
 		server.setExecutor(Executors.newCachedThreadPool());
 		server.start();
 		System.out.println("Server started on port " + port);
+	}
+	
+	public APISecureServer getSecureServer() {
+		return secureServer;
 	}
 
 }
