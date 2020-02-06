@@ -21,6 +21,7 @@ public class InternalErrors {
 	public static NoContextDefaultError noContextDefaultError = null;
 	public static MissingGetParametersError missingGetParametersError = null;
 	public static MissingPostParametersError missingPostParametersError = null;
+	public static MissingFileParametersError missingFileParametersError = null;
 	public static RateLimitError rateLimitError = null;
 	
 	public static InvalidCredentialsError invalidCredentialsError = null;
@@ -40,6 +41,7 @@ public class InternalErrors {
 			noContextDefaultError = new NoContextDefaultError();ErrorManager.registerError(noContextDefaultError);
 			missingGetParametersError = new MissingGetParametersError();ErrorManager.registerError(missingGetParametersError);
 			missingPostParametersError = new MissingPostParametersError();ErrorManager.registerError(missingPostParametersError);
+			missingFileParametersError = new MissingFileParametersError();ErrorManager.registerError(missingFileParametersError);
 			rateLimitError = new RateLimitError();ErrorManager.registerError(rateLimitError);
 			
 			invalidCredentialsError = new InvalidCredentialsError();ErrorManager.registerError(invalidCredentialsError);
@@ -115,6 +117,10 @@ public class InternalErrors {
 	 */
 	public static void missingPostParameters(Response e, String requestContext, Map<String, String> getQuery, String[] parameters) {
 		e.putErrorResponse(missingPostParametersError, "Action '"+getQuery.get("action")+"' expected parameters "+Arrays.toString(parameters));
+	}
+	
+	public static void missingFileParameters(Response e, String requestContext, Map<String, String> getQuery, String[] parameters) {
+		e.putErrorResponse(missingFileParametersError, "Action '"+getQuery.get("action")+"' expected parameters "+Arrays.toString(parameters));
 	}
 	
 	/**

@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import net.aionstudios.aionlog.AnsiOut;
 import net.aionstudios.aionlog.Logger;
 import net.aionstudios.aionlog.StandardOverride;
+import net.aionstudios.api.actions.AccountCreateSystemAction;
 import net.aionstudios.api.actions.AccountLoginAction;
 import net.aionstudios.api.actions.InstancePingAction;
 import net.aionstudios.api.actions.RateLimitsCheckAction;
@@ -134,6 +135,7 @@ public class API {
 		InstancePingAction instancePingAction = new InstancePingAction();
 		AccountLoginAction accountLoginAction = new AccountLoginAction();
 		RateLimitsCheckAction rateLimitsCheckAction = new RateLimitsCheckAction();
+		AccountCreateSystemAction accountCreateSystemAction = new AccountCreateSystemAction();
 		/*Register Contexts*/
 		ContextManager.registerContext(instanceContext);
 		ContextManager.registerContext(accountContext);
@@ -142,6 +144,7 @@ public class API {
 		instanceContext.registerAction(instancePingAction);
 		accountContext.registerAction(accountLoginAction);
 		rateLimitsContext.registerAction(rateLimitsCheckAction);
+		accountContext.registerAction(accountCreateSystemAction);
 		/*Error*/
 		InternalErrors.initializeInternalErrors();
 		

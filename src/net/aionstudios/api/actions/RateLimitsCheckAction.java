@@ -1,5 +1,6 @@
 package net.aionstudios.api.actions;
 
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONException;
@@ -7,6 +8,7 @@ import org.json.JSONException;
 import net.aionstudios.api.action.Action;
 import net.aionstudios.api.aos.ResponseStatus;
 import net.aionstudios.api.errors.InternalErrors;
+import net.aionstudios.api.file.MultipartFile;
 import net.aionstudios.api.response.Response;
 import net.aionstudios.api.service.AccountServices;
 import net.aionstudios.api.service.RateLimitServices;
@@ -22,7 +24,7 @@ public class RateLimitsCheckAction extends Action {
 
 	@Override
 	public void doAction(Response response, String requestContext, Map<String, String> getQuery,
-			Map<String, String> postQuery) throws JSONException {
+			Map<String, String> postQuery, List<MultipartFile> mfs) throws JSONException {
 		if(postQuery.containsKey("apiToken")) {
 			String apiKey = AccountServices.getApiKeyFromToken(postQuery.get("apiToken"));
 			if(apiKey.length()==64) {

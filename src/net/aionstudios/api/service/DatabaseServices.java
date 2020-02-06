@@ -14,14 +14,14 @@ public class DatabaseServices {
 			" `apiSecret` varchar(256) NOT NULL," + 
 			" `appDesc` text NULL," + 
 			" `appName` varchar(64) NOT NULL," + 
-			" `appType` tinyint(1) NOT NULL DEFAULT '4'," + 
+			" `appType` tinyint(1) NOT NULL DEFAULT '2'," + 
 			" `callback` text NULL," + 
 			" `organization` varchar(64) NULL," + 
 			" `website` text NULL," + 
 			" `privacy` text NULL," + 
 			" `terms` text NULL," + 
 			" `owner` varchar(64) NULL," + 
-			" `accessLevel` tinyint(1) NOT NULL DEFAULT '4'," + 
+			" `accessLevel` tinyint(1) NOT NULL DEFAULT '5'," + 
 			" PRIMARY KEY (`apiKey`)" + 
 			") ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE latin1_general_cs";
 	

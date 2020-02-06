@@ -1,9 +1,11 @@
 package net.aionstudios.api.action;
 
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONException;
 
+import net.aionstudios.api.file.MultipartFile;
 import net.aionstudios.api.response.Response;
 
 /**
@@ -18,6 +20,7 @@ public abstract class Action {
 	private String action;
 	private String[] getNames = new String[0];
 	private String[] postNames = new String[0];
+	private String[] fileNames = new String[0];
 	
 	/**
 	 * Creates a new AOS {@link Action}, dissociated from a context until added to any of several.
@@ -37,7 +40,7 @@ public abstract class Action {
 	 * @param postQuery A map of the post parameters provided in the request for this {@link Action}.
 	 * @throws JSONException Allows AOS to handle any possible JSON issues reducing perceived difficulty in creating custom {@link Action}s.
 	 */
-	public abstract void doAction(Response response, String requestContext, Map<String, String> getQuery, Map<String, String> postQuery) throws JSONException;
+	public abstract void doAction(Response response, String requestContext, Map<String, String> getQuery, Map<String, String> postQuery, List<MultipartFile> multipartFiles) throws JSONException;
 	
 	/**
 	 * Requires get parameters in request a by name.
@@ -55,6 +58,10 @@ public abstract class Action {
 	 */
 	public void setPostRequiredParams(String... postQueryNames) {
 		postNames = postQueryNames;
+	}
+	
+	public void setFileRequiredParams(String... fileNames) {
+		this.fileNames = fileNames;
 	}
 	
 	/**
@@ -107,6 +114,25 @@ public abstract class Action {
 		return true;
 	}
 	
+	public boolean hasFileRequirements(List<MultipartFile> mfs) {
+		if(fileNames.length>0) {
+			for(String gn : fileNames) {
+				boolean good = false;
+				if(mfs.size()>0) {
+					for(MultipartFile gq : mfs) {
+						if(gn.equals(gq.getFieldName())) {
+							good = true;
+						}
+					}
+				}
+				if(!good) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
 	/**
 	 * @return The string name of this {@link Action}.
 	 */
@@ -126,6 +152,10 @@ public abstract class Action {
 	 */
 	public String[] getPostRequiredParams() {
 		return postNames;
+	}
+	
+	public String[] getFileRequiredParams() {
+		return fileNames;
 	}
 
 }

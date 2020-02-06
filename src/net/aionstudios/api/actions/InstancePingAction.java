@@ -1,11 +1,13 @@
 package net.aionstudios.api.actions;
 
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONException;
 
 import net.aionstudios.api.action.Action;
 import net.aionstudios.api.aos.ResponseStatus;
+import net.aionstudios.api.file.MultipartFile;
 import net.aionstudios.api.response.Response;
 
 /**
@@ -18,9 +20,9 @@ public class InstancePingAction extends Action {
 	}
 
 	@Override
-	public void doAction(Response e, String requestContext, Map<String, String> getQuery,
-			Map<String, String> postQuery) throws JSONException {
-		e.putDataResponse(ResponseStatus.SUCCESS, "pong");
+	public void doAction(Response response, String requestContext, Map<String, String> getQuery,
+			Map<String, String> postQuery, List<MultipartFile> mfs) throws JSONException {
+		response.putDataResponse(ResponseStatus.SUCCESS, "pong");
 	}
 
 }

@@ -35,7 +35,7 @@ public class DatabaseConnector {
 	 */
 	public static boolean setupDatabase(String hostname, String databaseName, String databasePort, String databaseUser, String databasePassword) {
 		if(host=="") {
-			host = "jdbc:mysql://"+hostname+":"+databasePort;
+			host = "jdbc:mysql://"+hostname+":"+databasePort+"/?autoReconnect=true&serverTimezone=PST"; //jdbc:mysql://"+hostname+"/?autoReconnect="+Boolean.toString(autoReconnect)+"&serverTimezone="+timezone
 			database = databaseName;
 			user = databaseUser;
 			password = databasePassword;

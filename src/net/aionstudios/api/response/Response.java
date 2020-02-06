@@ -1,6 +1,7 @@
 package net.aionstudios.api.response;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.sun.net.httpserver.HttpExchange;
@@ -40,7 +41,7 @@ public class Response {
 		requestIP = RequestUtils.getRequestIP(he);
 		data = ResponseServices.getLinkedJsonObject();
 		error = ResponseServices.getLinkedJsonObject();
-		dataMap = new HashMap<String, Object>();
+		dataMap = new LinkedHashMap<String, Object>();
 	}
 	
 	/**
@@ -101,7 +102,7 @@ public class Response {
 	 * @param value The object value to be attached to the provided key.
 	 */
 	public void putData(String key, Object value) {
-		dataMap.put(key, value);
+		if(!dataMap.containsKey(key)) dataMap.put(key, value);
 	}
 	
 	/**

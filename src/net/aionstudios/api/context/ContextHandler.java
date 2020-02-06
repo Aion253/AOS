@@ -1,10 +1,16 @@
 package net.aionstudios.api.context;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.RequestContext;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,6 +22,7 @@ import net.aionstudios.api.aos.AOSInfo;
 import net.aionstudios.api.aos.RateEventReference;
 import net.aionstudios.api.compression.CompressionEncoding;
 import net.aionstudios.api.errors.InternalErrors;
+import net.aionstudios.api.file.MultipartFile;
 import net.aionstudios.api.response.Response;
 import net.aionstudios.api.service.AccountServices;
 import net.aionstudios.api.service.DateTimeServices;
@@ -66,12 +73,59 @@ public class ContextHandler implements HttpHandler {
 			getQuery = RequestUtils.resolveGetQuery(requestSplit[1]);
 		}
 		Map<String, String> postQuery = new HashMap<String, String>();
-		if(he.getRequestMethod().equalsIgnoreCase("POST")) {
-			postQuery = RequestUtils.resolvePostQuery(he);
-		}
+//		if(he.getRequestMethod().equalsIgnoreCase("POST")) {
+//			postQuery = RequestUtils.resolvePostQuery(he);
+//		}
 		/*if(postQuery.get((String) postQuery.keySet().toArray()[0])==getQuery.get((String) getQuery.keySet().toArray()[0])) {
 			postQuery = null;
 		}*/
+		//File Uploads
+		List<MultipartFile> mfs = new ArrayList<MultipartFile>();
+		List<FileItem> deleteLater = new ArrayList<>();
+		final String cT = he.getRequestHeaders().containsKey("Content-Type") ? he.getRequestHeaders().getFirst("Content-Type") : "text/html";
+		if(cT.contains("multipart/form-data")||cT.contains("multipart/stream")) {
+			DiskFileItemFactory d = new DiskFileItemFactory();
+				try {
+					ServletFileUpload up = new ServletFileUpload(d);
+					List<FileItem> result = up.parseRequest(new RequestContext() {
+
+						@Override
+						public String getCharacterEncoding() {
+							return "UTF-8";
+						}
+
+						@Override
+						public int getContentLength() {
+							return 0; //tested to work with 0 as return
+						}
+
+						@Override
+						public String getContentType() {
+							return cT;
+						}
+
+						@Override
+						public InputStream getInputStream() throws IOException {
+							return he.getRequestBody();
+						}
+
+					});
+					for(FileItem fi : result) {
+						if(!fi.isFormField()) {
+			        		mfs.add(new MultipartFile(fi.getFieldName(), fi.getName(), fi.getContentType(), fi.getInputStream(), fi.getSize()));
+			        		deleteLater.add(fi);
+			        	} else {
+			        		postQuery.put(fi.getFieldName(), fi.getString());
+			        	}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else {
+				if(he.getRequestMethod().equalsIgnoreCase("POST")) {
+				postQuery = RequestUtils.resolvePostQuery(he);
+			}
+		}
 		boolean rateLimited = false;
 		boolean ipReason = false;
 		String apiToken = "";
@@ -96,11 +150,15 @@ public class ContextHandler implements HttpHandler {
 					if(action!=null) {
 						if(action.hasGetRequirements(getQuery)) {
 							if(action.hasPostRequirements(postQuery)) {
-								try {
-									action.doAction(resp, requestContext, getQuery, postQuery);
-								} catch (JSONException e) {
-									System.err.println("Failed converting JSON to String");
-									e.printStackTrace();
+								if(action.hasFileRequirements(mfs)) {
+									try {
+										action.doAction(resp, requestContext, getQuery, postQuery, mfs);
+									} catch (JSONException e) {
+										System.err.println("Failed converting JSON to String");
+										e.printStackTrace();
+									}
+								} else {
+									InternalErrors.missingFileParameters(resp, requestContext, getQuery, action.getFileRequiredParams());
 								}
 							} else {
 								InternalErrors.missingPostParameters(resp, requestContext, getQuery, action.getPostRequiredParams());
