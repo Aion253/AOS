@@ -26,9 +26,9 @@ import net.aionstudios.api.context.SecureContextHandler;
 
 public class APISecureServer {
 
-	private boolean started = false;
-	private HttpsServer server;
-	private int port = 26777;
+	private static boolean started = false;
+	private static HttpsServer server;
+	private static int port = 26777;
 	
 	/*
 	 * To generate a compatible JKS certificate it is recommended to get the default cert/key files from a certificate authority
@@ -48,7 +48,7 @@ public class APISecureServer {
 	 * @param keyPassword		The password for a single {@link Certificate} in the JKS {@link KeyStore}.
 	 * @param certificateAlias	The JKS {@link KeyStore}'s named certificate.
 	 */
-	public void startServer(String certificate, String storePassword, String keyPassword, String certificateAlias) {
+	public static void startServer(String certificate, String storePassword, String keyPassword, String certificateAlias) {
 		if(!started) {
 			boolean noError = false;
 			try {
@@ -121,11 +121,11 @@ public class APISecureServer {
 		}
 	}
 	
-	public void startServer(String certificate, String storePassword, String keyPassword, String certificateAlias, int port) {
-		if(port<0||port>65535) {
+	public static void startServer(String certificate, String storePassword, String keyPassword, String certificateAlias, int sp) {
+		if(sp<0||sp>65535) {
 			System.out.println("No valid server port, using default "+port);
 		} else {
-			this.port=port;
+			port=sp;
 		}
 		if(!started) {
 			boolean noError = false;

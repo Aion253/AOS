@@ -8,9 +8,7 @@ import net.aionstudios.api.util.DatabaseUtils;
 
 /**
  * A class for assisting in connecting to and executing queries on MySQL databases using JDBC.
- * 
  * @author Winter Roberts
- *
  */
 public class DatabaseConnector {
 	
@@ -25,7 +23,6 @@ public class DatabaseConnector {
 	
 	/**
 	 * Connects and logs into a MySQL database.
-	 * 
 	 * @param hostname The hostname of the database server.
 	 * @param databaseName The name of database to be logged in to.
 	 * @param databasePort The port on which the database accepts connections.
@@ -33,13 +30,14 @@ public class DatabaseConnector {
 	 * @param databasePassword The password of the database user provided in the databaseUser argument.
 	 * @return True if the database is functioning and accepted the connection, false otherwise.
 	 */
-	public static boolean setupDatabase(String hostname, String databaseName, String databasePort, String databaseUser, String databasePassword) {
+	public static boolean setupDatabase(String hostname, String databaseName, String databasePort, String databaseUser, String databasePassword, boolean autoReconnect, String timezone) {
 		if(host=="") {
-			host = "jdbc:mysql://"+hostname+":"+databasePort+"/?autoReconnect=true&serverTimezone=PST"; //jdbc:mysql://"+hostname+"/?autoReconnect="+Boolean.toString(autoReconnect)+"&serverTimezone="+timezone
+			host = "jdbc:mysql://"+hostname+":"+databasePort+"/?autoReconnect="+Boolean.toString(autoReconnect)+"&serverTimezone="+timezone;
 			database = databaseName;
 			user = databaseUser;
 			password = databasePassword;
 			try {
+				//?autoReconnect=true&useSSL=false&serverTimezone=PDT
 				loadJDBC();
 				db = DriverManager.getConnection(host, user, password);
 			} catch (SQLException e1) {
@@ -61,18 +59,23 @@ public class DatabaseConnector {
 		return false;
 	}
 	
+	public static void refreshConnection() throws SQLException {
+		db.close();
+		db = DriverManager.getConnection(host, user, password);
+		getDatabase().setCatalog(database);
+	}
+	
 	/**
 	 * Connects and logs into a MySQL database using the default port.
-	 * 
 	 * @param hostname The hostname of the database server.
 	 * @param databaseName The name of database to be logged in to.
 	 * @param databaseUser The username of a database user with access to the provided database.
 	 * @param databasePassword The password of the database user provided in the databaseUser argument.
 	 * @return True if the database is functioning and accepted the connection, false otherwise.
 	 */
-	public static boolean setupDatabase(String hostname, String databaseName, String databaseUser, String databasePassword) {
+	public static boolean setupDatabase(String hostname, String databaseName, String databaseUser, String databasePassword, boolean autoReconnect, String timezone) {
 		if(host=="") {
-			host = "jdbc:mysql://"+hostname;
+			host = "jdbc:mysql://"+hostname+"/?autoReconnect="+Boolean.toString(autoReconnect)+"&serverTimezone="+timezone;
 			database = databaseName;
 			user = databaseUser;
 			password = databasePassword;
@@ -97,7 +100,11 @@ public class DatabaseConnector {
 	}
 	
 	/**
-	 * Loads the database drive for JDBC if it hasn't been already
+	 * Loads the database drive for JDBC if it hasn't been already.
+	 * <p>
+	 * This will cause newer version of Java to print a warning about how the
+	 * driver is automatically added, which will result in this older version
+	 * of the the driver not loading.
 	 */
 	public static void loadJDBC() {
 		if(loadedJDBC==false) {
@@ -112,8 +119,8 @@ public class DatabaseConnector {
 	}
 	
 	/**
-	 * Gets an instance of the database to query through
-	 * @return	A database connection
+	 * Gets an instance of the database to query through.
+	 * @return	A database connection.
 	 */
 	public static Connection getDatabase() {
 		return db;

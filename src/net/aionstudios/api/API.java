@@ -22,8 +22,10 @@ import net.aionstudios.api.cron.CronManager;
 import net.aionstudios.api.crons.PurgeExpiredSessionsCronJob;
 import net.aionstudios.api.database.DatabaseConnector;
 import net.aionstudios.api.errors.InternalErrors;
+import net.aionstudios.api.server.APISecureServer;
 import net.aionstudios.api.server.APIServer;
 import net.aionstudios.api.service.DatabaseServices;
+import net.aionstudios.api.service.ResponseServices;
 
 /**
  * A class that handles the creation of an API through the context of a static method.
@@ -120,6 +122,43 @@ public class API {
 		return true;
 	}
 	
+	/**
+	 * A one-time run method that creates a new {@link APIServer}.
+	 * 
+	 * @param apiName The user-level name of the API.
+	 * @param apiPort The port that the service should be broadcasting on.
+	 * @param apiLog Whether or not the console should be logged to a file.
+	 * @param apiStreamPrefix The name to use before console outputs from the API.
+	 * @return True if the service was able to start, false otherwise.
+	 */
+	public static boolean initAPI(String apiName, int apiPort, boolean apiLog, String apiStreamPrefix, int securePort) {
+		System.setProperty("java.net.preferIPv4Stack" , "true");
+		if(name!=null) {
+			System.err.println("An API was already intialized for this instance! Only one API can be registered!");
+			return false;
+		} else {
+			System.out.println("Starting AOS Server...");
+		}
+		name = apiName;
+		port = apiPort;
+		log = apiLog;
+		streamPrefix = apiStreamPrefix;
+		
+		if(log) {
+			File f = new File("./logs/");
+			f.mkdirs();
+			Logger.setup();
+		}
+		AnsiOut.initialize();
+		AnsiOut.setStreamPrefix(streamPrefix);
+		StandardOverride.enableOverride();
+		
+		setupDefaults();
+		
+		server = new APIServer(port);
+		return true;
+	}
+	
 	//https://stackoverflow.com/questions/11914445/run-a-cron-job-every-minute-only-on-specific-hours
 	/**
 	 * Sets up AOS internal {@link Action}s, {@link Context}s, {@link AOSError}s and {@link CronJob}s.
@@ -150,7 +189,7 @@ public class API {
 		
 		/*Database*/
 		try {
-			DatabaseConnector.setupDatabase(databaseInfo.getString("db_hostname"), databaseInfo.getString("db_name"), databaseInfo.getString("db_port"), databaseInfo.getString("db_user"), databaseInfo.getString("db_pass"));
+			DatabaseConnector.setupDatabase(databaseInfo.getString("db_hostname"), databaseInfo.getString("db_name"), databaseInfo.getString("db_port"), databaseInfo.getString("db_user"), databaseInfo.getString("db_pass"), true, "UTC");
 		} catch (JSONException e) {
 			System.err.println("Encountered a JSONException during database setup!");
 			e.printStackTrace();
@@ -197,6 +236,46 @@ public class API {
 	 */
 	public static APIServer getServer() {
 		return server;
+	}
+	
+	/**
+	 * Initializes a {@link JDCSecureServer} if config files dictate to do so. HTTPS is disabled by default.
+	 */
+	private static void startSecureServer(int port) {
+		File certsConfig = new File("./certs.json");
+		JSONObject certsJson = ResponseServices.getLinkedJsonObject();
+		if(certsConfig.exists()) {
+			certsJson = AOSInfo.readConfig(certsConfig);
+		} else {
+			try {
+				certsConfig.createNewFile();
+				certsJson.put("enable_ssl_server", false);
+				certsJson.put("jks_certificate", "cert.jks");
+				certsJson.put("store_password", "changeit");
+				certsJson.put("key_password", "changeit");
+				certsJson.put("cert_alias", "certificate");
+				AOSInfo.writeConfig(certsJson, certsConfig);
+			} catch (IOException e) {
+				System.err.println("Encountered an IOException during config file operations!");
+				e.printStackTrace();
+			} catch (JSONException e) {
+				System.err.println("Encountered an IOException during config file operations!");
+				e.printStackTrace();
+			}
+		}
+		try {
+			boolean enabled = certsJson.getBoolean("enable_ssl_server");
+			if(enabled) {
+				String jksCertificate = certsJson.getString("jks_certificate");
+				String storePassword = certsJson.getString("store_password");
+				String keyPassword = certsJson.getString("key_password");
+				String certAlias = certsJson.getString("cert_alias");
+				APISecureServer.startServer(jksCertificate, storePassword, keyPassword, certAlias, port);
+			}
+		} catch (JSONException e1) {
+			System.err.println("Failed to interpret processor config!");
+			e1.printStackTrace();
+		}
 	}
 
 }
