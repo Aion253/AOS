@@ -27,7 +27,7 @@ public class AccountLoginAction extends Action {
 			Map<String, String> postQuery, List<MultipartFile> mfs) throws JSONException {
 		String token = AccountServices.loginGetToken(postQuery.get("apiKey"), postQuery.get("apiSecret"));
 		if(token!="") {
-			response.putData("apiToken", token);
+			response.putData("api_token", token);
 			response.putDataResponse(ResponseStatus.SUCCESS, "Provided token will be valid for the next thirty minutes.");
 		} else {
 			response.putErrorResponse(InternalErrors.invalidCredentialsError, "Credentials mismatch or no entry exists.");

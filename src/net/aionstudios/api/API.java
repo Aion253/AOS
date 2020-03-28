@@ -36,9 +36,9 @@ import net.aionstudios.api.service.ResponseServices;
 public class API {
 	
 	private static String name;
-	private static int port;
 	private static boolean log;
 	private static String streamPrefix;
+	private static boolean allowInsecure;
 	
 	/*Why do static field modifications within an instanced class modify the fields of all instances as the declaring class? That's dumb.*/
 	
@@ -84,6 +84,7 @@ public class API {
 	//Alternatively, I am now using Aion Forefront and will soon be adding ssl support in AOS
 	
 	private static APIServer server;
+	private static APISecureServer secureServer;
 	
 	/**
 	 * A one-time run method that creates a new {@link APIServer}.
@@ -103,7 +104,6 @@ public class API {
 			System.out.println("Starting AOS Server...");
 		}
 		name = apiName;
-		port = apiPort;
 		log = apiLog;
 		streamPrefix = apiStreamPrefix;
 		
@@ -118,7 +118,7 @@ public class API {
 		
 		setupDefaults();
 		
-		server = new APIServer(port);
+		server = new APIServer(apiPort);
 		return true;
 	}
 	
@@ -131,7 +131,7 @@ public class API {
 	 * @param apiStreamPrefix The name to use before console outputs from the API.
 	 * @return True if the service was able to start, false otherwise.
 	 */
-	public static boolean initAPI(String apiName, int apiPort, boolean apiLog, String apiStreamPrefix, int securePort) {
+	public static boolean initAPI(String apiName, int apiPort, boolean apiLog, String apiStreamPrefix, int securePort, boolean allowInsecure) {
 		System.setProperty("java.net.preferIPv4Stack" , "true");
 		if(name!=null) {
 			System.err.println("An API was already intialized for this instance! Only one API can be registered!");
@@ -140,9 +140,9 @@ public class API {
 			System.out.println("Starting AOS Server...");
 		}
 		name = apiName;
-		port = apiPort;
 		log = apiLog;
 		streamPrefix = apiStreamPrefix;
+		API.allowInsecure = allowInsecure;
 		
 		if(log) {
 			File f = new File("./logs/");
@@ -155,7 +155,10 @@ public class API {
 		
 		setupDefaults();
 		
-		server = new APIServer(port);
+		if(API.allowInsecure) {
+			server = new APIServer(apiPort);
+		}
+		startSecureServer(securePort);
 		return true;
 	}
 	
@@ -211,13 +214,6 @@ public class API {
 	}
 
 	/**
-	 * @return The port the service is running on.
-	 */
-	public static int getPort() {
-		return port;
-	}
-
-	/**
 	 * @return Whether or not logging is enabled.
 	 */
 	public static boolean isLogging() {
@@ -236,6 +232,10 @@ public class API {
 	 */
 	public static APIServer getServer() {
 		return server;
+	}
+	
+	public static APISecureServer getSecureServer() {
+		return secureServer;
 	}
 	
 	/**
@@ -270,7 +270,8 @@ public class API {
 				String storePassword = certsJson.getString("store_password");
 				String keyPassword = certsJson.getString("key_password");
 				String certAlias = certsJson.getString("cert_alias");
-				APISecureServer.startServer(jksCertificate, storePassword, keyPassword, certAlias, port);
+				secureServer = new APISecureServer(port);
+				secureServer.startServer(jksCertificate, storePassword, keyPassword, certAlias);
 			}
 		} catch (JSONException e1) {
 			System.err.println("Failed to interpret processor config!");

@@ -1,9 +1,9 @@
 package net.aionstudios.api.context;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import net.aionstudios.api.action.Action;
+import net.aionstudios.api.server.APIServer;
 
 /**
  * A class that accumulates active {@link Context}s on the {@link APIServer} so that they can be located by the {@link ContextHandler} when they're requested.
@@ -13,7 +13,7 @@ import net.aionstudios.api.action.Action;
  */
 public class ContextManager {
 	
-	private static List<Context> contexts = new ArrayList<Context>();
+	private static Map<String, Context> contexts = new HashMap<>();
 	
 	/**
 	 * Registers a {@link Context} to the {@link ContextManager}.
@@ -21,15 +21,8 @@ public class ContextManager {
 	 * @param con the {@link Context} to be registered to the {@link ContextManager}.
 	 * @return True if the {@link Context} was registered and none other by the same name was already registered to the {@link ContextManager}, false otherwise.
 	 */
-	public static boolean registerContext(Context con) {
-		for(Context c: contexts) {
-			if(con.getContext().equals(c.getContext())) {
-				System.err.println("Attempt to register duplicate context '"+con.getContext()+"' failed! A context by the same name has already reserved the call!");
-				return false;
-			}
-		}
-		contexts.add(con);
-		return true;
+	public static void registerContext(Context con) {
+		contexts.put(con.getContext(), con);
 	}
 	
 	/**
@@ -38,8 +31,8 @@ public class ContextManager {
 	 * @param con The {@link Context} to be removed from this {@link ContextManager}.
 	 * @return True if the {@link Context} was removed from the {@link ContextManager}, false otherwise.
 	 */
-	public static boolean removeContext(Context con) {
-		return contexts.remove(con);
+	public static Context removeContext(Context con) {
+		return contexts.remove(con.getContext());
 	}
 	
 	/**
@@ -49,12 +42,7 @@ public class ContextManager {
 	 * @return A {@link Context} registered to the {@link ContextManager} matching the provided name, or null if no such entry exists.
 	 */
 	public static Context findContext(String context) {
-		for(Context c: contexts) {
-			if(c.getContext().equals(context)) {
-				return c;
-			}
-		}
-		return null;
+		return contexts.get(context);
 	}
 
 }

@@ -30,7 +30,7 @@ public class AccountServices {
 	//Account setup
 	private static String countAccountsQuery = "SELECT COUNT(*) FROM `AOSAccounts`;";
 	private static String keyExistsQuery = "SELECT COUNT(*) FROM `AOSAccounts` WHERE `apiKey` = ?;";
-	private static String createAccountQuery = "INSERT INTO `harmonia_aos`.`aosaccounts` (`apiKey`, `apiSecret`, `appDesc`, `appName`, `appType`, `callback`, `organization`, `website`, `privacy`, `terms`, `owner`, `accessLevel`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+	private static String createAccountQuery = "INSERT INTO `AOSAccounts` (`apiKey`, `apiSecret`, `appDesc`, `appName`, `appType`, `callback`, `organization`, `website`, `privacy`, `terms`, `owner`, `accessLevel`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 	
 	/**
 	 * Retrieves a client's apiKey given their apiToken.

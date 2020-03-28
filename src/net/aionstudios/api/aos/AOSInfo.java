@@ -21,7 +21,7 @@ import net.aionstudios.api.service.ResponseServices;
  */
 public class AOSInfo {
 	
-	public static final String AOS_VERSION = "1.0.0.";
+	public static final String AOS_VERSION = "1.0.0";
 	public static final String AOS_NAME = "Aion Online Services Server";
 	public static final String AOS_DBCONFIG = "./config/aos_db.json";
 	
@@ -34,10 +34,10 @@ public class AOSInfo {
 	 * 
 	 * @return A String providing information for those who have reached the API endpoint but failed to make a request.
 	 */
-	public static String getBlankRootString() {
+	public static String getBlankRootString(boolean secure) {
 		return "You've reached an API endpoint identifying itself as '"+API.getName()+"'\n"
 				+ "The server is online!\n\n"
-				+ "Aion Online Services Server (1.0.0) running on port "+API.getPort();
+				+ AOS_NAME + " ("+AOS_VERSION+") running on port "+(secure?API.getSecureServer().getPort():API.getServer().getPort());
 	}
 	
 	/**

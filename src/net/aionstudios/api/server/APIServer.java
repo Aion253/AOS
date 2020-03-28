@@ -16,9 +16,8 @@ import net.aionstudios.api.context.ContextHandler;
  */
 public class APIServer {
 	
-	HttpServer server;
-	int serverPort = 26767;
-	private APISecureServer secureServer;
+	private HttpServer server;
+	private int port = 26767;
 	
 	/**
 	 * Creates a new {@link APIServer}
@@ -26,14 +25,13 @@ public class APIServer {
 	 * @param port The port on which the server should start.
 	 */
 	public APIServer(int port) {
-		secureServer = new APISecureServer();
 		if(port<0||port>65535) {
-			System.out.println("No valid server port, using default "+serverPort);
+			System.out.println("No valid server port, using default "+port);
 		} else {
-			this.serverPort=port;
+			this.port=port;
 		}
 		try {
-			server = HttpServer.create(new InetSocketAddress(serverPort), 0);
+			server = HttpServer.create(new InetSocketAddress(port), 0);
 		} catch (IOException e) {
 			System.err.println("Failed to AOS Server!");
 			e.printStackTrace();
@@ -45,8 +43,8 @@ public class APIServer {
 		System.out.println("Server started on port " + port);
 	}
 	
-	public APISecureServer getSecureServer() {
-		return secureServer;
+	public int getPort() {
+		return port;
 	}
 
 }

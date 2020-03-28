@@ -50,7 +50,7 @@ public class SecureContextHandler  implements HttpHandler {
 			}
 		}
 		if(he.getRequestURI().toString().equals("/")) {
-			ResponseServices.generateHTTPResponse(he, resp.getResponseCode(), AOSInfo.getBlankRootString(), ce);
+			ResponseServices.generateHTTPResponse(he, resp.getResponseCode(), AOSInfo.getBlankRootString(true), ce);
 			return;
 		}
 		String[] requestSplit;

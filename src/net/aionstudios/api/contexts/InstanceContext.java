@@ -23,7 +23,16 @@ public class InstanceContext extends Context {
 	@Override
 	public void contextDefault(Response e, String requestContext) throws JSONException {
 		e.putData("api_identity", API.getName());
-		e.putData("api_port", API.getPort());
+		e.putData("api_secure", API.getSecureServer()!=null);
+		if(API.getSecureServer()!=null) {
+			e.putData("api_secure_port", API.getSecureServer().getPort());
+			e.putData("api_secure_strict", API.getServer()==null);
+			if(API.getServer()!=null) {
+				e.putData("api_port", API.getServer().getPort());
+			}
+		} else {
+			e.putData("api_port", API.getServer().getPort());
+		}
 		e.putData("aos_version", AOSInfo.AOS_VERSION);
 		e.putData("aos_identity", AOSInfo.AOS_NAME);
 		e.putData("java_version", AOSInfo.JAVA_VERSION);

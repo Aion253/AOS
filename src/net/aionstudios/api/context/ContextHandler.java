@@ -56,7 +56,7 @@ public class ContextHandler implements HttpHandler {
 			}
 		}
 		if(he.getRequestURI().toString().equals("/")) {
-			ResponseServices.generateHTTPResponse(he, resp.getResponseCode(), AOSInfo.getBlankRootString(), ce);
+			ResponseServices.generateHTTPResponse(he, resp.getResponseCode(), AOSInfo.getBlankRootString(false), ce);
 			return;
 		}
 		String[] requestSplit;
