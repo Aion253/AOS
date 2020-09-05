@@ -28,6 +28,8 @@ public class InternalErrors {
 	public static InvalidSessionError invalidSessionError = null;
 	public static UnauthorizedAccessError unauthorizedAccessError = null;
 	
+	public static UncaughtExceptionError uncaughtExceptionError = null;
+	
 	/**
 	 * Creates instances of each internal {@link AOSError} and registers them to the {@link ErrorManager}.
 	 * 
@@ -48,6 +50,7 @@ public class InternalErrors {
 			invalidSessionError = new InvalidSessionError();ErrorManager.registerError(invalidSessionError);
 			unauthorizedAccessError = new UnauthorizedAccessError();ErrorManager.registerError(unauthorizedAccessError);
 			
+			uncaughtExceptionError = new UncaughtExceptionError();ErrorManager.registerError(uncaughtExceptionError);
 			return true;
 		}
 		return false;
@@ -140,6 +143,10 @@ public class InternalErrors {
 	 */
 	public static void invalidSessionError(Response e) {
 		e.putErrorResponse(invalidSessionError, "The provided apiToken was not registered to any account!");
+	}
+	
+	public static void uncaughtExceptionError(Response e) {
+		e.putErrorResponse(uncaughtExceptionError, "An internal error occured!");
 	}
 
 }

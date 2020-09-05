@@ -90,7 +90,7 @@ public class AOSInfo {
 				System.out.println("Created config file '"+f.toString()+"'!");
 			}
 			PrintWriter writer;
-			File temp = File.createTempFile("temp_andf", null, f.getParentFile());
+			File temp = File.createTempFile("temp_config", null, f.getParentFile());
 			writer = new PrintWriter(temp.toString(), "UTF-8");
 			writer.println(j.toString(2));
 			writer.close();

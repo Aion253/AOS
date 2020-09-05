@@ -149,6 +149,8 @@ public class API {
 			f.mkdirs();
 			Logger.setup();
 		}
+		File f = new File("./certs/");
+		f.mkdirs();
 		AnsiOut.initialize();
 		AnsiOut.setStreamPrefix(streamPrefix);
 		StandardOverride.enableOverride();
@@ -158,7 +160,10 @@ public class API {
 		if(API.allowInsecure) {
 			server = new APIServer(apiPort);
 		}
-		startSecureServer(securePort);
+		if(!startSecureServer(securePort)&&!API.allowInsecure) {
+			System.out.println("Secure mode is disabled or misconfigured! No server started; closing.");
+			System.exit(0);
+		}
 		return true;
 	}
 	
@@ -241,12 +246,13 @@ public class API {
 	/**
 	 * Initializes a {@link JDCSecureServer} if config files dictate to do so. HTTPS is disabled by default.
 	 */
-	private static void startSecureServer(int port) {
+	private static boolean startSecureServer(int port) {
 		File certsConfig = new File("./certs.json");
 		JSONObject certsJson = ResponseServices.getLinkedJsonObject();
 		if(certsConfig.exists()) {
 			certsJson = AOSInfo.readConfig(certsConfig);
 		} else {
+			System.out.println("Certificate config was missing. Secure mode disabled by default!");
 			try {
 				certsConfig.createNewFile();
 				certsJson.put("enable_ssl_server", false);
@@ -272,11 +278,13 @@ public class API {
 				String certAlias = certsJson.getString("cert_alias");
 				secureServer = new APISecureServer(port);
 				secureServer.startServer(jksCertificate, storePassword, keyPassword, certAlias);
+				return true;
 			}
 		} catch (JSONException e1) {
 			System.err.println("Failed to interpret processor config!");
 			e1.printStackTrace();
 		}
+		return false;
 	}
 
 }

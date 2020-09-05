@@ -145,12 +145,19 @@ public class SecureContextHandler  implements HttpHandler {
 						if(action.hasGetRequirements(getQuery)) {
 							if(action.hasPostRequirements(postQuery)) {
 								if(action.hasFileRequirements(mfs)) {
+									boolean succ = true;
 									try {
 										action.doAction(resp, requestContext, getQuery, postQuery, mfs);
 									} catch (JSONException e) {
 										System.err.println("Failed converting JSON to String");
 										e.printStackTrace();
+										succ = false;
+									} catch (Exception e) {
+										System.err.println("Internal Error in action " + action.getAction() + " for context " + context.getContext());
+										e.printStackTrace();
+										succ = false;
 									}
+									if (!succ) InternalErrors.uncaughtExceptionError(resp);
 								} else {
 									InternalErrors.missingFileParameters(resp, requestContext, getQuery, action.getFileRequiredParams());
 								}
