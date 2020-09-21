@@ -32,6 +32,12 @@ import net.aionstudios.api.util.DatabaseUtils;
 import net.aionstudios.api.util.RequestUtils;
 import net.aionstudios.api.util.SecurityUtils;
 
+/**
+ * A class that handles all incoming HTTPS requests to the {@link APISecureServer}, usually forwarding them for completion to a {@link Context} and often from there, to an {@link Action}.
+ * 
+ * @author Winter Roberts
+ *
+ */
 public class SecureContextHandler  implements HttpHandler {
 
 	@Override

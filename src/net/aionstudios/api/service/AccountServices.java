@@ -132,10 +132,30 @@ public class AccountServices {
 		return "";
 	}
 	
+	/**
+	 * Creates the system app key and secret if it does not already exist.
+	 * 
+	 * @return Null, of the system account information if it was just created.
+	 */
 	public static String setupAccountsIfEmpty() {
 		return ((Long) DatabaseUtils.prepareAndExecute(countAccountsQuery, true).get(0).getResults().get(0).get("COUNT(*)") == 0) ? createAccountQuery("AOS SYSTEM KEY", "SYSTEM", AppType.PARTNER, null, "AOS", null, null, null, null, AccessLevel.SYSTEM) : null;
 	}
 	
+	/**
+	 * Creates a new AOS app account.
+	 * 
+	 * @param appDesc			The description for the app/account to be created.
+	 * @param appName			The name for the app/account to be created.
+	 * @param appType			The {@link AppType} for the app/account to be created.
+	 * @param callback			The callback URL for the app/account to be created.
+	 * @param organization		The organization for the app/account to be created.
+	 * @param website			The website URL for the app/account to be created.
+	 * @param privacy			The privacy URL for the app/account to be created.
+	 * @param terms				The terms of service URL for the app/account to be created.
+	 * @param ownerID			The owner for the app/account to be created.
+	 * @param accessLevel		The {@link AccessLevel} for the app/account to be created.
+	 * @return The key and secret for the create app/account.
+	 */
 	public static String createAccountQuery(String appDesc, String appName, AppType appType, String callback, String organization, String website, String privacy, String terms, String ownerID, AccessLevel accessLevel) {
 		String tryKey = SecurityUtils.genToken(64);
 		boolean keyValid = false;

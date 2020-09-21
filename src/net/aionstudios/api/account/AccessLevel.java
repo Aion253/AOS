@@ -1,5 +1,11 @@
 package net.aionstudios.api.account;
 
+/**
+ * Defines AOS app access levels for core endpoints.
+ * 
+ * @author Winter Roberts
+ *
+ */
 public enum AccessLevel {
 
 	BASE(5),

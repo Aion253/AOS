@@ -145,6 +145,11 @@ public class InternalErrors {
 		e.putErrorResponse(invalidSessionError, "The provided apiToken was not registered to any account!");
 	}
 	
+	/**
+	 * Switches the {@link Response} to that of a UncaughtExceptionError.
+	 * 
+	 * @param e	The {@link Response} to be sent back to the client.
+	 */
 	public static void uncaughtExceptionError(Response e) {
 		e.putErrorResponse(uncaughtExceptionError, "An internal error occured!");
 	}

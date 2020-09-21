@@ -1,5 +1,11 @@
 package net.aionstudios.api.account;
 
+/**
+ * Defines AOS app user-data privacy levels.
+ * 
+ * @author Winter Roberts
+ *
+ */
 public enum AppType {
 
 	PUBLIC(2),

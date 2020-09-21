@@ -33,7 +33,7 @@ import net.aionstudios.api.util.RequestUtils;
 import net.aionstudios.api.util.SecurityUtils;
 
 /**
- * A class that handles all incoming HTTP requests to the {@link APIServer}, usually forwarding them for completion to a {@link Context} and often from there, to and {@link Action}.
+ * A class that handles all incoming HTTP requests to the {@link APIServer}, usually forwarding them for completion to a {@link Context} and often from there, to an {@link Action}.
  * 
  * @author Winter Roberts
  *

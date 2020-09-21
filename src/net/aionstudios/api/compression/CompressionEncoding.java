@@ -1,5 +1,11 @@
 package net.aionstudios.api.compression;
 
+/**
+ * Defines the possible encoding standards AOS supports. Note Brotli compression may be added in a future release.
+ * 
+ * @author Winter Roberts
+ *
+ */
 public enum CompressionEncoding {
 
 	NONE(0),

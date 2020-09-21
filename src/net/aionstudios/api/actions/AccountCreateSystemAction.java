@@ -12,6 +12,12 @@ import net.aionstudios.api.file.MultipartFile;
 import net.aionstudios.api.response.Response;
 import net.aionstudios.api.service.AccountServices;
 
+/**
+ * A run-once {@link Action} that creates the AOS System API token and key for servers or administrators during setup.
+ * 
+ * @author wrpar
+ *
+ */
 public class AccountCreateSystemAction extends Action {
 
 	public AccountCreateSystemAction() {

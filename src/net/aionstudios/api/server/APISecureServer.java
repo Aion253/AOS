@@ -24,6 +24,12 @@ import com.sun.net.httpserver.HttpsServer;
 
 import net.aionstudios.api.context.SecureContextHandler;
 
+/**
+ * A class that creates the {@link APISecureServer} and enables HTTPS.
+ * 
+ * @author Winter Roberts
+ *
+ */
 public class APISecureServer {
 
 	private boolean started = false;

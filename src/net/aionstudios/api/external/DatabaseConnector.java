@@ -6,6 +6,12 @@ import java.sql.SQLException;
 
 import net.aionstudios.api.util.DatabaseUtils;
 
+/**
+ * Interfaces with the JDBC driver.
+ * 
+ * @author Winter Roberts
+ *
+ */
 public class DatabaseConnector {
 	
 	private static String host = "";
@@ -17,6 +23,15 @@ public class DatabaseConnector {
 	
 	private static Connection db;
 	
+	/**
+	 * Establishes a connection the the database.
+	 * @param hostname				The database hostname.
+	 * @param databaseName			The default transacting database name.
+	 * @param databasePort			The connection port (3306 is default).
+	 * @param databaseUser			The user for this database connection.
+	 * @param databasePassword		The password for this database connection.
+	 * @return	True if the connection was successful, false otherwise.
+	 */
 	public static boolean setupDatabase(String hostname, String databaseName, String databasePort, String databaseUser, String databasePassword) {
 		if(host=="") {
 			host = "jdbc:mysql://"+hostname+":"+databasePort;
@@ -43,6 +58,14 @@ public class DatabaseConnector {
 		return false;
 	}
 	
+	/**
+	 * Establishes a connection the the database.
+	 * @param hostname				The database hostname.
+	 * @param databaseName			The default transacting database name.
+	 * @param databaseUser			The user for this database connection.
+	 * @param databasePassword		The password for this database connection.
+	 * @return	True if the connection was successful, false otherwise.
+	 */
 	public static boolean setupDatabase(String hostname, String databaseName, String databaseUser, String databasePassword) {
 		if(host=="") {
 			host = "jdbc:mysql://"+hostname;
